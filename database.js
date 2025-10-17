@@ -87,14 +87,19 @@ class Database {
 
     // Admin Functions
     async isAdmin(username) {
-        const { data, error } = await this.supabase
-            .from('admins')
-            .select('*')
-            .eq('username', username)
-            .single();
+        try {
+            // Use ILIKE for case-insensitive match
+            const { data, error } = await this.supabase
+                .from('admins')
+                .select('*')
+                .ilike('username', username)
+                .single();
 
-        if (error) return false;
-        return !!data;
+            if (error) return false;
+            return !!data;
+        } catch (err) {
+            return false;
+        }
     }
 
     async addCurrency(username, amount) {
