@@ -29,113 +29,96 @@
     </div>
 
     <div class="app-container">
-        <!-- Main Page -->
-        <div id="mainPage" class="page active">
-            <!-- Background particles -->
-            <div id="particles-js"></div>
-
-            <!-- Background image -->
-            <div class="main-background"></div>
-
-            <header class="main-header">
-                <h1 class="main-title animated-title">FNTD WORLD</h1>
-                <button class="settings-btn" onclick="showSettings()">
-                    ⚙️
-                </button>
-            </header>
-
-            <!-- Currency Display - moved below header -->
-            <div class="currency-container">
-                <div class="currency-display">
-                    <span class="currency-icon">💰</span>
-                    <span class="currency-amount" id="currencyAmount">0</span>
-                </div>
-            </div>
-
-            <!-- Countdown Timer -->
-            <div class="countdown-container">
-                <div class="countdown-title">РЕЛИЗ ЧЕРЕЗ:</div>
-                <div id="countdown" class="countdown-timer">2 ДНЯ</div>
-            </div>
-
-            <div class="main-content">
-                <div class="main-buttons">
-                    <button class="section-btn calculator-btn modern-btn" onclick="showSection('calculator')">
-                        <span class="btn-text">CALCULATOR</span>
-                    </button>
-
-                    <button class="section-btn trades-btn modern-btn" onclick="showSection('trades')">
-                        <span class="btn-text">TRADES</span>
-                    </button>
-
-                    <button class="section-btn wiki-btn modern-btn" onclick="showSection('wiki')">
-                        <span class="btn-text">GAME WIKI</span>
-                    </button>
-
-                    <button class="section-btn updates-btn modern-btn" onclick="showSection('updates')">
-                        <span class="btn-text">UPDATES</span>
-                    </button>
-
-                    <button class="section-btn casino-btn modern-btn" onclick="showSection('casino')">
-                        <span class="btn-text">CASINO</span>
-                    </button>
-
-                    <button class="section-btn inventory-btn modern-btn" onclick="showSection('inventory')">
-                        <span class="btn-text">INVENTORY</span>
-                    </button>
-
-                    <button class="section-btn admin-btn modern-btn" id="adminBtn" onclick="showSection('admin')">
-                        <span class="btn-text">ADMIN PANEL</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Profile Page -->
         <div id="profilePage" class="page">
             <header class="page-header">
                 <button class="back-btn" onclick="showMain()">
-                    ← Back
+                    190 Back
                 </button>
                 <h2 class="page-title">PROFILE</h2>
                 <div class="header-controls">
                     <button class="admin-header-btn" id="adminBtnHeader" onclick="showSection('admin')">ADMIN
                         PANEL</button>
                     <button class="settings-btn" onclick="showSettings()">
-                        ⚙️
+                        699e0f
                     </button>
                 </div>
+            </header>
+
+            <div class="profile-container">
+                <span class="currency-icon">💰</span>
+                <span class="currency-amount" id="currencyAmount">0</span>
+            </div>
         </div>
+
+        <!-- Countdown Timer -->
+        <div class="countdown-container">
+            <div class="countdown-title">РЕЛИЗ ЧЕРЕЗ:</div>
+            <div id="countdown" class="countdown-timer">2 ДНЯ</div>
+        </div>
+
+        <div class="main-content">
+            <div class="main-buttons">
+                <button class="section-btn calculator-btn modern-btn" onclick="showSection('calculator')">
+                    <span class="btn-text">CALCULATOR</span>
+                </button>
+
+                <button class="section-btn trades-btn modern-btn" onclick="showSection('trades')">
+                    <span class="btn-text">TRADES</span>
+                </button>
+
+                <button class="section-btn wiki-btn modern-btn" onclick="showSection('wiki')">
+                    <span class="btn-text">GAME WIKI</span>
+                </button>
+
+                <button class="section-btn updates-btn modern-btn" onclick="showSection('updates')">
+                    <span class="btn-text">UPDATES</span>
+                </button>
+
+                <button class="section-btn casino-btn modern-btn" onclick="showSection('casino')">
+                    <span class="btn-text">CASINO</span>
+                </button>
+
+                <button class="section-btn inventory-btn modern-btn" onclick="showSection('inventory')">
+                    <span class="btn-text">INVENTORY</span>
+                </button>
+
+                <button class="section-btn admin-btn modern-btn" id="adminBtn" onclick="showSection('admin')">
+                    <span class="btn-text">ADMIN PANEL</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="adminPage" class="page">
+        <header class="page-header">
+            <button class="back-btn" onclick="showMain()">
+                190 Back
+            </button>
+            <h2 class="page-title">ADMIN PANEL</h2>
         </header>
 
-        <div class="profile-container">
-            <div class="profile-header">
-                <div class="profile-avatar" id="profileAvatar">U</div>
-                <div class="profile-info">
-                    <div class="profile-name" id="profileName">User</div>
-                    <div class="profile-username" id="profileUsername">@username</div>
-                </div>
-            </div>
-
-            <div class="profile-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalSpins">0</div>
-                    <div class="stat-label">Total Spins</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="itemsOwned">0</div>
-                    <div class="stat-label">Items Owned</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="daysActive">1</div>
-                    <div class="stat-label">Days Active</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="tradeCount">0</div>
-                    <div class="stat-label">Trades Made</div>
-                </div>
+        <div class="section-content">
+            <div class="coming-soon-section">
+                <div class="coming-soon-icon">🔄</div>
+                <h3>ADMIN PANEL - COMING SOON</h3>
+                <p>The administrative tools will be available here in a future update.</p>
             </div>
         </div>
+    </div>
+    <div class="stat-label">Items Owned</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" id="daysActive">1</div>
+        <div class="stat-label">Days Active</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" id="tradeCount">0</div>
+        <div class="stat-label">Trades Made</div>
+    </div>
+    </div>
+    </div>
     </div>
 
     <!-- Settings Page -->
