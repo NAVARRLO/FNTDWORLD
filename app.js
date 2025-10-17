@@ -348,12 +348,17 @@ class FNTDWorldApp {
         // Update inventory
         this.updateInventoryDisplay();
 
-        // Show/hide admin button based on username
+        // Show/hide admin button based on username (case-insensitive)
         const adminBtn = document.getElementById('adminBtn');
-        if (this.adminUsernames.includes(this.userData.profile.username)) {
-            adminBtn.style.display = 'flex';
+        const adminBtnHeader = document.getElementById('adminBtnHeader');
+        const currentUsername = (this.userData.profile.username || '').toLowerCase();
+        const isLocalAdmin = this.adminUsernames.some(u => (u || '').toLowerCase() === currentUsername);
+        if (isLocalAdmin) {
+            if (adminBtn) adminBtn.style.display = 'flex';
+            if (adminBtnHeader) adminBtnHeader.style.display = 'flex';
         } else {
-            adminBtn.style.display = 'none';
+            if (adminBtn) adminBtn.style.display = 'none';
+            if (adminBtnHeader) adminBtnHeader.style.display = 'none';
         }
 
         // Update casino button state
@@ -464,7 +469,7 @@ class FNTDWorldApp {
         }
     }
 
-    showSection(section) {
+    async showSection(section) {
         const pageMap = {
             'calculator': 'calculatorPage',
             'trades': 'tradesPage',
@@ -478,6 +483,20 @@ class FNTDWorldApp {
 
         const targetPage = pageMap[section];
         if (targetPage) {
+            // Protect admin page on client-side as well
+            if (section === 'admin') {
+                try {
+                    const isAdmin = await this.db.isAdmin(this.userData.profile.username);
+                    if (!isAdmin) {
+                        this.showNotification('Unauthorized access', 'error');
+                        return;
+                    }
+                } catch (err) {
+                    console.error('Error checking admin status:', err);
+                    this.showNotification('Error checking permissions', 'error');
+                    return;
+                }
+            }
             this.showPage(targetPage);
 
             // Show section-specific notification
