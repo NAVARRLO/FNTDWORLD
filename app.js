@@ -6,6 +6,11 @@ class FNTDWorldApp {
         this.currentPage = 'mainPage';
         this.isAnimating = false;
         this.db = db; // Supabase database instance
+        
+        // Device detection
+        this.deviceType = this.detectDeviceType();
+        this.screenSize = this.getScreenSize();
+        
         this.userData = {
             currency: 0,
             inventory: [],
@@ -129,8 +134,157 @@ class FNTDWorldApp {
         this.init();
     }
 
+    // Device detection methods
+    detectDeviceType() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isMobile = /mobile|android|iphone|ipad|ipod|windows phone/i.test(userAgent);
+        const isTablet = /tablet|ipad/i.test(userAgent) && !/mobile/i.test(userAgent);
+        
+        if (isMobile) return 'mobile';
+        if (isTablet) return 'tablet';
+        return 'desktop';
+    }
+
+    getScreenSize() {
+        const width = window.innerWidth;
+        if (width < 768) return 'small';
+        if (width < 1024) return 'medium';
+        return 'large';
+    }
+
+    applyDeviceSpecificStyles() {
+        document.body.setAttribute('data-device', this.deviceType);
+        document.body.setAttribute('data-screen', this.screenSize);
+        
+        console.log(`Device: ${this.deviceType}, Screen: ${this.screenSize}`);
+        
+        this.applyLayoutOptimizations();
+    }
+
+    applyLayoutOptimizations() {
+        const device = this.deviceType;
+        const screen = this.screenSize;
+        
+        if (device === 'mobile') {
+            this.optimizeForMobile();
+        }
+        
+        if (device === 'tablet') {
+            this.optimizeForTablet();
+        }
+        
+        if (device === 'desktop') {
+            this.optimizeForDesktop();
+        }
+        
+        this.optimizeByScreenSize(screen);
+    }
+
+    optimizeForMobile() {
+        console.log('Applying mobile optimizations');
+        this.reduceAnimations();
+        this.optimizeTouchInterface();
+        this.adjustElementSizes('mobile');
+    }
+
+    optimizeForTablet() {
+        console.log('Applying tablet optimizations');
+        this.adjustElementSizes('tablet');
+        this.optimizeTouchInterface();
+    }
+
+    optimizeForDesktop() {
+        console.log('Applying desktop optimizations');
+        this.enableDesktopFeatures();
+        this.adjustElementSizes('desktop');
+    }
+
+    optimizeByScreenSize(screenSize) {
+        switch(screenSize) {
+            case 'small':
+                this.applySmallScreenOptimizations();
+                break;
+            case 'medium':
+                this.applyMediumScreenOptimizations();
+                break;
+            case 'large':
+                this.applyLargeScreenOptimizations();
+                break;
+        }
+    }
+
+    reduceAnimations() {
+        if (this.deviceType === 'mobile') {
+            document.documentElement.style.setProperty('--transition-smooth', '0.1s ease');
+        }
+    }
+
+    optimizeTouchInterface() {
+        if (this.deviceType === 'mobile' || this.deviceType === 'tablet') {
+            const touchElements = document.querySelectorAll('.modern-btn, .nav-item, .setting-option');
+            touchElements.forEach(el => {
+                el.style.minHeight = '44px';
+                el.style.minWidth = '44px';
+            });
+        }
+    }
+
+    adjustElementSizes(device) {
+        const sizes = {
+            'mobile': {
+                buttonHeight: '60px',
+                fontSize: '14px',
+                iconSize: '20px'
+            },
+            'tablet': {
+                buttonHeight: '70px',
+                fontSize: '16px',
+                iconSize: '24px'
+            },
+            'desktop': {
+                buttonHeight: '80px',
+                fontSize: '18px',
+                iconSize: '28px'
+            }
+        };
+        
+        const config = sizes[device];
+        
+        document.documentElement.style.setProperty('--button-height', config.buttonHeight);
+        document.documentElement.style.setProperty('--base-font-size', config.fontSize);
+    }
+
+    enableDesktopFeatures() {
+        if (this.deviceType === 'desktop') {
+            document.body.classList.add('desktop-hover');
+        }
+    }
+
+    applySmallScreenOptimizations() {
+        const elements = document.querySelectorAll('.card, .stat-card');
+        elements.forEach(el => {
+            el.style.padding = '12px';
+            el.style.marginBottom = '10px';
+        });
+    }
+
+    applyMediumScreenOptimizations() {
+        // Balanced settings for medium screens
+    }
+
+    applyLargeScreenOptimizations() {
+        if (this.deviceType === 'desktop') {
+            const appContainer = document.querySelector('.app-container');
+            if (appContainer) {
+                appContainer.style.maxWidth = '1400px';
+            }
+        }
+    }
 
     async init() {
+        // Apply device detection first
+        this.applyDeviceSpecificStyles();
+        
         // Initialize Telegram Web App
         if (window.Telegram && window.Telegram.WebApp) {
             const tg = window.Telegram.WebApp;
@@ -152,8 +306,10 @@ class FNTDWorldApp {
             });
         }
 
-        // Initialize particles background
-        this.initParticles();
+        // Initialize particles background only for non-mobile devices
+        if (this.deviceType !== 'mobile') {
+            this.initParticles();
+        }
 
         // Initialize countdown timer
         this.initCountdown();
@@ -164,7 +320,7 @@ class FNTDWorldApp {
         // Initialize UI
         this.updateUI();
 
-        console.log('FNTD World App initialized');
+        console.log(`FNTD World App initialized for ${this.deviceType} device`);
     }
 
     async start() {
@@ -329,6 +485,9 @@ class FNTDWorldApp {
     }
 
     updateUI() {
+        // Apply device-specific styles first
+        this.applyDeviceSpecificStyles();
+
         // Update currency displays
         document.querySelectorAll('.currency-amount').forEach(el => {
             el.textContent = this.userData.currency.toLocaleString();
@@ -670,7 +829,7 @@ class FNTDWorldApp {
         });
 
         // Calculate position to center the winning item
-        const itemWidth = 170;
+        const itemWidth = this.deviceType === 'mobile' ? 120 : 170;
         const containerCenter = document.querySelector('.roulette-container').offsetWidth / 2;
         const winningItemPosition = 25 * itemWidth + (itemWidth / 2);
         const finalPosition = containerCenter - winningItemPosition;
@@ -968,19 +1127,18 @@ class FNTDWorldApp {
     }
 }
 
-// Initialize app and expose to window for inline handlers (modules are not global)
-// Create app instance but delay initialization until DOM is ready
+// Initialize app and expose to window for inline handlers
 const app = new FNTDWorldApp();
 window.app = app;
 
-// Start the app after DOM is loaded so DOM queries succeed
+// Start the app after DOM is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => app.start());
 } else {
     app.start();
 }
 
-// Global functions for HTML onclick handlers (exposed on window)
+// Global functions for HTML onclick handlers
 window.showMain = () => app.showPage('mainPage');
 window.showSettings = () => app.showPage('settingsPage');
 window.showSection = (section) => app.showSection(section);
@@ -994,6 +1152,22 @@ window.addCurrencyToUser = () => app.addCurrencyToUser();
 window.giveItemToUser = () => app.giveItemToUser();
 window.banUser = () => app.banUser();
 window.giveItemToAll = () => app.giveItemToAll();
+
+// Handle window resize for dynamic adaptation
+window.addEventListener('resize', () => {
+    app.screenSize = app.getScreenSize();
+    app.applyDeviceSpecificStyles();
+    app.updateUI();
+});
+
+// Handle device orientation change
+window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+        app.screenSize = app.getScreenSize();
+        app.applyDeviceSpecificStyles();
+        app.updateUI();
+    }, 300);
+});
 
 // Add ripple effect to buttons
 document.addEventListener('click', (e) => {
