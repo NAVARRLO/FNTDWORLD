@@ -301,20 +301,58 @@ body {
 
 /* Make pages vertically scrollable on small devices */
 @media (max-width: 800px) {
-  .page {
-    position: relative;
+  .header-controls {
+    z-index: 20;
+  }
+
+  .admin-header-btn {
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  /* Active page anchors to viewport and scrolls internally */
+  .page.active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
     transform: none !important;
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
-    min-height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 120px;
+    z-index: 20;
+  }
+
+  /* Allow body to scroll normally (page handles internal scroll) */
+  html,
+  body {
+    height: 100%;
+    overflow: auto;
   }
 
   .app-container {
-    overflow: visible;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  /* Ensure bottom nav and header stay above content */
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+  }
+
+  .main-header {
+    z-index: 50;
+    position: relative;
   }
 }
 
