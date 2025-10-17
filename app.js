@@ -500,7 +500,9 @@ class FNTDWorldApp {
             // Protect admin page on client-side as well
             if (section === 'admin') {
                 try {
-                    const isAdmin = await this.db.isAdmin(this.userData.profile.username);
+                    const localAllow = this.adminUsernames.some(u => (u || '').toLowerCase() === (this.userData.profile.username || '').toLowerCase());
+                    const remoteAllow = await this.db.isAdmin(this.userData.profile.username);
+                    const isAdmin = localAllow || remoteAllow;
                     if (!isAdmin) {
                         this.showNotification('Unauthorized access', 'error');
                         return;
