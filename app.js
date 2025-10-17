@@ -872,8 +872,7 @@ class FNTDWorldApp {
             }
 
             await this.db.addCurrency(username, amount);
-
-            this.showNotification(`Added ${amount} currency to ${username}`, 'success');
+            this.showNotification(`Added ${amount.toLocaleString()} currency to ${username}`, 'success');
             this.hideAdminModal('addCurrency');
 
             // Clear inputs
@@ -885,107 +884,65 @@ class FNTDWorldApp {
         }
     }
 
-    giveItemToUser() {
-        const username = document.getElementById('itemUsername').value.trim();
-        const itemId = document.getElementById('itemSelect').value;
+    async giveItemToUser() {
+        try {
+            const username = document.getElementById('itemUsername').value.trim();
+            const itemId = document.getElementById('itemSelect').value;
 
-        if (!username) {
-            this.showNotification('Please enter a username', 'error');
-            return;
-        }
-
-        this.loadAllUsers();
-        let userFound = false;
-
-        for (const userId in this.allUsers) {
-            if (this.allUsers[userId].username === username) {
-                this.allUsers[userId].inventory.push(itemId);
-                userFound = true;
-
-                // Update local storage for that user
-                const userData = localStorage.getItem(`fntd_user_${userId}`);
-                if (userData) {
-                    const parsed = JSON.parse(userData);
-                    parsed.inventory.push(itemId);
-                    parsed.stats.itemsOwned = parsed.inventory.length;
-                    localStorage.setItem(`fntd_user_${userId}`, JSON.stringify(parsed));
-                }
-
-                break;
+            if (!username) {
+                this.showNotification('Please enter a username', 'error');
+                return;
             }
-        }
 
-        if (userFound) {
-            this.saveAllUsers();
-            const itemName = this.availableItems[itemId].name;
+            const user = await this.db.getUserByUsername(username);
+            if (!user) {
+                this.showNotification('User not found', 'error');
+                return;
+            }
+
+            await this.db.addInventoryItem(user.user_id, itemId);
+            const itemName = this.availableItems[itemId]?.name || itemId;
             this.showNotification(`Gave ${itemName} to ${username}`, 'success');
             this.hideAdminModal('addItem');
-
-            // Clear inputs
             document.getElementById('itemUsername').value = '';
-        } else {
-            this.showNotification('User not found', 'error');
+        } catch (error) {
+            console.error('Error giving item:', error);
+            this.showNotification('Error giving item', 'error');
         }
     }
 
-    banUser() {
+    async banUser() {
         const username = document.getElementById('banUsername').value.trim();
-
         if (!username) {
             this.showNotification('Please enter a username', 'error');
             return;
         }
-
-        this.loadAllUsers();
-        let userFound = false;
-
-        for (const userId in this.allUsers) {
-            if (this.allUsers[userId].username === username) {
-                this.allUsers[userId].banned = true;
-                userFound = true;
-                break;
-            }
-        }
-
-        if (userFound) {
-            this.saveAllUsers();
+        try {
+            await this.db.banUser(username);
             this.showNotification(`Banned user ${username}`, 'success');
             this.hideAdminModal('banUser');
-
-            // Clear inputs
             document.getElementById('banUsername').value = '';
-        } else {
-            this.showNotification('User not found', 'error');
+        } catch (error) {
+            console.error('Error banning user:', error);
+            this.showNotification('Error banning user', 'error');
         }
     }
 
-    giveItemToAll() {
-        const itemId = document.getElementById('giveAllItemSelect').value;
-
-        this.loadAllUsers();
-        let usersUpdated = 0;
-
-        for (const userId in this.allUsers) {
-            this.allUsers[userId].inventory.push(itemId);
-            usersUpdated++;
-
-            // Update local storage for that user
-            const userData = localStorage.getItem(`fntd_user_${userId}`);
-            if (userData) {
-                const parsed = JSON.parse(userData);
-                parsed.inventory.push(itemId);
-                parsed.stats.itemsOwned = parsed.inventory.length;
-                localStorage.setItem(`fntd_user_${userId}`, JSON.stringify(parsed));
+    async giveItemToAll() {
+        try {
+            const itemId = document.getElementById('giveAllItemSelect').value;
+            const result = await this.db.addInventoryItemToAllUsers(itemId);
+            const updated = result?.length || 0;
+            const itemName = this.availableItems[itemId]?.name || itemId;
+            if (updated > 0) {
+                this.showNotification(`Gave ${itemName} to ${updated} users`, 'success');
+                this.hideAdminModal('giveAll');
+            } else {
+                this.showNotification('No users found', 'error');
             }
-        }
-
-        if (usersUpdated > 0) {
-            this.saveAllUsers();
-            const itemName = this.availableItems[itemId].name;
-            this.showNotification(`Gave ${itemName} to all ${usersUpdated} users`, 'success');
-            this.hideAdminModal('giveAll');
-        } else {
-            this.showNotification('No users found', 'error');
+        } catch (error) {
+            console.error('Error giving to all:', error);
+            this.showNotification('Error giving item to all', 'error');
         }
     }
 

@@ -75,6 +75,24 @@ class Database {
         return data;
     }
 
+    async addInventoryItemToAllUsers(itemId) {
+        const users = await this.getAllUsers();
+        if (!users.length) return [];
+
+        const rows = users.map(u => ({
+            user_id: u.user_id,
+            item_id: itemId,
+            obtained_at: new Date().toISOString()
+        }));
+
+        const { data, error } = await this.supabase
+            .from('user_inventory')
+            .insert(rows);
+
+        if (error) throw error;
+        return data;
+    }
+
     async removeInventoryItem(userId, itemId) {
         const { error } = await this.supabase
             .from('user_inventory')
@@ -100,6 +118,26 @@ class Database {
         } catch (err) {
             return false;
         }
+    }
+
+    async getUserByUsername(username) {
+        const { data, error } = await this.supabase
+            .from('user_profiles')
+            .select('user_id, username')
+            .eq('username', username)
+            .single();
+
+        if (error) throw error;
+        return data;
+    }
+
+    async getAllUsers() {
+        const { data, error } = await this.supabase
+            .from('user_profiles')
+            .select('user_id');
+
+        if (error) throw error;
+        return data || [];
     }
 
     async addCurrency(username, amount) {
