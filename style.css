@@ -222,7 +222,7 @@ body {
   opacity: 0;
   transform: translateX(100%);
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 50%, #0a0a0a 100%);
+  background: transparent;
   padding-bottom: 70px;
   visibility: hidden;
   pointer-events: none;
@@ -686,7 +686,7 @@ body {
 .page-header {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
   padding: 20px;
   background: rgba(21, 21, 21, 0.95);
   backdrop-filter: blur(10px);
@@ -698,8 +698,8 @@ body {
   border: 2px solid #666666;
   border-radius: 4px;
   color: var(--color-text);
-  padding: 8px 12px;
-  font-size: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
   font-family: 'Press Start 2P', monospace;
   cursor: pointer;
   transition: all var(--transition-smooth);
@@ -732,6 +732,13 @@ body {
   justify-content: space-around;
   padding: 12px 0;
   z-index: 100;
+}
+
+/* Hide stray duplicate early admin page and floating stat blocks present outside pages */
+body > #adminPage.page:first-of-type,
+body > .stat-label,
+body > .stat-card {
+  display: none !important;
 }
 
 .nav-item {
