@@ -335,15 +335,27 @@ class FNTDWorldApp {
         });
 
         // Update profile
-        document.getElementById('profileName').textContent = this.userData.profile.name;
-        document.getElementById('profileUsername').textContent = this.userData.profile.username;
-        document.getElementById('profileAvatar').textContent = this.userData.profile.avatar;
+        const profileNameEl = document.getElementById('profileName');
+        if (profileNameEl) profileNameEl.textContent = this.userData.profile.name;
+
+        const profileUsernameEl = document.getElementById('profileUsername');
+        if (profileUsernameEl) profileUsernameEl.textContent = this.userData.profile.username;
+
+        const profileAvatarEl = document.getElementById('profileAvatar');
+        if (profileAvatarEl) profileAvatarEl.textContent = this.userData.profile.avatar;
 
         // Update stats
-        document.getElementById('totalSpins').textContent = this.userData.stats.totalSpins;
-        document.getElementById('itemsOwned').textContent = this.userData.inventory.length;
-        document.getElementById('daysActive').textContent = this.userData.stats.daysActive;
-        document.getElementById('tradeCount').textContent = this.userData.stats.tradeCount;
+        const totalSpinsEl = document.getElementById('totalSpins');
+        if (totalSpinsEl) totalSpinsEl.textContent = this.userData.stats.totalSpins;
+
+        const itemsOwnedEl = document.getElementById('itemsOwned');
+        if (itemsOwnedEl) itemsOwnedEl.textContent = this.userData.inventory.length;
+
+        const daysActiveEl = document.getElementById('daysActive');
+        if (daysActiveEl) daysActiveEl.textContent = this.userData.stats.daysActive;
+
+        const tradeCountEl = document.getElementById('tradeCount');
+        if (tradeCountEl) tradeCountEl.textContent = this.userData.stats.tradeCount;
 
         // Update inventory
         this.updateInventoryDisplay();
@@ -367,6 +379,8 @@ class FNTDWorldApp {
 
     updateCasinoButton() {
         const spinButton = document.getElementById('spinButton');
+        if (!spinButton) return;
+
         if (this.userData.currency < 1000) {
             spinButton.disabled = true;
             spinButton.textContent = 'NEED 1,000 💰';
