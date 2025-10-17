@@ -28,6 +28,7 @@
             <div class="loading-progress" id="loadingProgress"></div>
         </div>
     </div>
+    <div class="main-background"></div>
 
     <div class="app-container">
         <!-- Profile Page -->
@@ -47,8 +48,39 @@
             </header>
 
             <div class="profile-container">
-                <span class="currency-icon">💰</span>
-                <span class="currency-amount" id="currencyAmount">0</span>
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">U</div>
+                    <div class="profile-info">
+                        <div class="profile-name" id="profileName">User</div>
+                        <div class="profile-username" id="profileUsername">@username</div>
+                    </div>
+                </div>
+
+                <div class="currency-container">
+                    <div class="currency-display">
+                        <span class="currency-icon">💰</span>
+                        <span class="currency-amount" id="currencyAmount">0</span>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalSpins">0</div>
+                        <div class="stat-label">Total Spins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="itemsOwned">0</div>
+                        <div class="stat-label">Items Owned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="daysActive">1</div>
+                        <div class="stat-label">Days Active</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="tradeCount">0</div>
+                        <div class="stat-label">Trades Made</div>
+                    </div>
+                </div>
             </div>
         </div>
 
